@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.vendor.management.system</groupId>
+        <artifactId>vendor-management-system</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <artifactId>user-service</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>user-dataaccess</module>
+        <module>user-application</module>
+        <module>user-container</module>
+    </modules>
+
+</project>

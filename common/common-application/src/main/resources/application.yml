@@ -1,0 +1,26 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8383/realms/vendor-manager
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+jwt:
+  auth:
+    converter:
+      resource-id: vendormgr-public-client
+      realm-access-key: realm_access
+      realm-access-id: roles
+      principal-attribute: sub
+  attr:
+    username: preferred_username
+    email: email
+    given-name: given_name
+    family-name: family_name
+    name: name
+    created-by: createdBy
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

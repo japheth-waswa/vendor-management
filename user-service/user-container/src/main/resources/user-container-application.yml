@@ -1,0 +1,6 @@
+server:
+  port: 7172
+
+logging:
+  level:
+    com.vendor.management.system: DEBUG

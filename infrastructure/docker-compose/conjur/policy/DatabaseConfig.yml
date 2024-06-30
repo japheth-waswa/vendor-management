@@ -1,0 +1,77 @@
+- !policy
+  id: DatabaseConfig
+  body:
+    # Define an administrator, service account and variables
+    - !user DatabaseConfigAdmin
+    - !host DatabaseConfigApp
+
+    - !variable postgresqlHost
+    - !variable postgresqlDatabase
+    - !variable postgresqlUsername
+    - !variable postgresqlPassword
+    - !variable keycloakPostgresqlHost
+    - !variable keycloakPostgresqlPort
+
+    # Give read and write permissions to the administrator for all variables.
+    - !permit
+      role: !user DatabaseConfigAdmin
+      privileges: [read, update, execute]
+      resource: !variable postgresqlHost
+
+    - !permit
+      role: !user DatabaseConfigAdmin
+      privileges: [ read, update, execute ]
+      resource: !variable postgresqlDatabase
+
+    - !permit
+      role: !user DatabaseConfigAdmin
+      privileges: [ read, update, execute ]
+      resource: !variable postgresqlUsername
+
+    - !permit
+      role: !user DatabaseConfigAdmin
+      privileges: [ read, update, execute ]
+      resource: !variable postgresqlPassword
+
+    - !permit
+      role: !user DatabaseConfigAdmin
+      privileges: [ read, update, execute ]
+      resource: !variable keycloakPostgresqlHost
+
+    - !permit
+      role: !user DatabaseConfigAdmin
+      privileges: [ read, update, execute ]
+      resource: !variable keycloakPostgresqlPort
+
+    # Give read permissions to the service account to fetch the variables.
+    - !permit
+      role: !host DatabaseConfigApp
+      privileges: [read, execute]
+      resource: !variable postgresqlHost
+
+    - !permit
+      role: !host DatabaseConfigApp
+      privileges: [ read, execute ]
+      resource: !variable postgresqlDatabase
+
+    - !permit
+      role: !host DatabaseConfigApp
+      privileges: [ read, execute ]
+      resource: !variable postgresqlUsername
+
+    - !permit
+      role: !host DatabaseConfigApp
+      privileges: [ read, execute ]
+      resource: !variable postgresqlPassword
+
+    - !permit
+      role: !host DatabaseConfigApp
+      privileges: [ read, execute ]
+      resource: !variable keycloakPostgresqlHost
+
+    - !permit
+      role: !host DatabaseConfigApp
+      privileges: [ read, execute ]
+      resource: !variable keycloakPostgresqlPort
+
+

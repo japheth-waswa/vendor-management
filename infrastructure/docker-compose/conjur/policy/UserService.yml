@@ -1,0 +1,42 @@
+- !policy
+  id: UserServiceMicroservice
+  body:
+    # Define an administrator, service account, and variables for keycloak base url, client id, client secret.
+    - !user UserServiceAdmin
+    - !host UserServiceApp
+
+    - !variable keycloakBaseUrl
+    - !variable keycloakClientId
+    - !variable keycloakClientSecret
+
+    # Give read and write permissions to the administrator for all variables.
+    - !permit
+      role: !user UserServiceAdmin
+      privileges: [read, update, execute]
+      resource: !variable keycloakBaseUrl
+
+    - !permit
+      role: !user UserServiceAdmin
+      privileges: [read, update, execute]
+      resource: !variable keycloakClientId
+
+    - !permit
+      role: !user UserServiceAdmin
+      privileges: [read, update, execute]
+      resource: !variable keycloakClientSecret
+
+    # Give read permissions to the service account to fetch the variables.
+    - !permit
+      role: !host UserServiceApp
+      privileges: [read, execute]
+      resource: !variable keycloakBaseUrl
+
+    - !permit
+      role: !host UserServiceApp
+      privileges: [read, execute]
+      resource: !variable keycloakClientId
+
+    - !permit
+      role: !host UserServiceApp
+      privileges: [read, execute]
+      resource: !variable keycloakClientSecret

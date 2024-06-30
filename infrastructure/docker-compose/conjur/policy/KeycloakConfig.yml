@@ -1,0 +1,33 @@
+- !policy
+  id: KeycloakConfig
+  body:
+    # Define an administrator, service account and variables
+    - !user KeycloakConfigAdmin
+    - !host KeycloakConfigApp
+
+    - !variable adminUsername
+    - !variable adminPassword
+
+    # Give read and write permissions to the administrator for all variables.
+    - !permit
+      role: !user KeycloakConfigAdmin
+      privileges: [read, update, execute]
+      resource: !variable adminUsername
+
+    - !permit
+      role: !user KeycloakConfigAdmin
+      privileges: [ read, update, execute ]
+      resource: !variable adminPassword
+
+    # Give read permissions to the service account to fetch the variables.
+    - !permit
+      role: !host KeycloakConfigApp
+      privileges: [read, execute]
+      resource: !variable adminUsername
+
+    - !permit
+      role: !host KeycloakConfigApp
+      privileges: [ read, execute ]
+      resource: !variable adminPassword
+
+

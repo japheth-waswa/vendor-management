@@ -1,0 +1,6 @@
+keycloak:
+  uri-token: realms/vendor-manager/protocol/openid-connect/token
+  uri-role: admin/realms/vendor-manager/roles
+  uri-manage-user: admin/realms/vendor-manager/users
+  uri-single-user-roles: admin/realms/vendor-manager/users/{userId}/role-mappings/realm
+  uri-verification-email: admin/realms/vendor-manager/users/{userId}/send-verify-email

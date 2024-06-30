@@ -1,0 +1,65 @@
+version: '3.8'
+services:
+  conjur_openssl:
+    image: cyberark/conjur
+    entrypoint: /tmp/conf/generate_cert.sh
+    volumes:
+     - ./conjur/tls/:/tmp/conf
+     - ./conjur/generate_cert.sh:/tmp/conf/generate_cert.sh
+    networks:
+      - ${GLOBAL_NETWORK:-conjur_openssl}
+
+  conjur_postgres:
+    image: postgres:15
+    container_name: conjur_postgres
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: password
+      POSTGRES_PASSWORD: ${CONJUR_POSTGRES_PASSWORD}
+    ports:
+      - 8432:5432
+    volumes:
+      - "./volumes/conjur_postgres:/var/lib/postgresql/data"
+    networks:
+      - ${GLOBAL_NETWORK:-conjur_postgres}
+
+  conjur_server:
+    image: cyberark/conjur
+    container_name: conjur_server
+    command: server
+    environment:
+      DATABASE_URL: postgres://${CONJUR_POSTGRES_USER}:${CONJUR_POSTGRES_PASSWORD}@host.docker.internal:8432/postgres
+      CONJUR_DATA_KEY:
+      CONJUR_AUTHENTICATORS:
+      CONJUR_TELEMETRY_ENABLED: 'false'
+    depends_on:
+    - conjur_postgres
+    restart: on-failure
+    ports:
+      - 8080:80
+    networks:
+      - ${GLOBAL_NETWORK:-conjur_server}
+
+  conjur_proxy:
+    image: nginx:latest
+    container_name: conjur_proxy
+    ports:
+      - "8443:443"
+    volumes:
+      - ./conjur/:/etc/nginx/conf.d/:ro
+      - ./conjur/tls/:/etc/nginx/tls/:ro
+    depends_on:
+    - conjur_server
+    - conjur_openssl
+    restart: on-failure
+    networks:
+      - ${GLOBAL_NETWORK:-conjur_proxy}
+
+  conjur_client:
+    image: cyberark/conjur-cli:8
+    depends_on: [ conjur_proxy ]
+    entrypoint: sleep
+    command: infinity
+    volumes:
+      - ./conjur/policy:/policy
+    networks:
+      - ${GLOBAL_NETWORK:-conjur_client}

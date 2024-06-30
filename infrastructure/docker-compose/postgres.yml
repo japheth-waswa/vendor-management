@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  postgres:
+#    image: postgres:13
+    container_name: postgres
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+      args:
+        CONJUR_ACCOUNT: ${CONJUR_ACCOUNT}
+        CONJUR_APPLIANCE_URL: ${CONJUR_APPLIANCE_URL}
+        CONJUR_DATABASE_CONFIG_VERSION: ${CONJUR_DATABASE_CONFIG_VERSION}
+        CONJUR_AUTHN_LOGIN_HOST_DATABASE_CONFIG: ${CONJUR_AUTHN_LOGIN_HOST_DATABASE_CONFIG}
+        CONJUR_AUTHN_API_KEY_HOST_DATABASE_CONFIG: ${CONJUR_AUTHN_API_KEY_HOST_DATABASE_CONFIG}
+        CONJUR_VARIABLE_POSTRESQL_USERNAME: ${CONJUR_VARIABLE_POSTRESQL_USERNAME}
+        CONJUR_VARIABLE_POSTRESQL_PASSWORD: ${CONJUR_VARIABLE_POSTRESQL_PASSWORD}
+    ports:
+      - "5434:5432"
+    shm_size: 128mb
+    volumes:
+      - "./volumes/postgres:/var/lib/postgresql/data"
+      - "./postgres/postgresql.conf:/var/lib/postgresql/data/postgresql.conf"
+      - "./postgres/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf"
+    networks:
+      - ${GLOBAL_NETWORK:-postgres}
