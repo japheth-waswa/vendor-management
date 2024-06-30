@@ -40,13 +40,13 @@ build/
 ### NodeJS ###
 node_modules
 
-### Micro-service ###
-infrastructure/docker-compose/volumes
-
-### Conjur ###
+### My Own ###
 .idea
 .env
 *.pem
+nginx.crt
+nginx.key
+infrastructure/docker-compose/volumes
 infrastructure/docker-compose/volumes/
 infrastructure/docker-compose/conjur/guide/
 infrastructure/docker-compose/startup.txt
